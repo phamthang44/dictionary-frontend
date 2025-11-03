@@ -1,7 +1,8 @@
 <!-- filepath: src/components/CategoryModal.vue -->
 <template>
   <div
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto"
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto"
+    @click.self="closeModal"
   >
     <div class="bg-white rounded-lg shadow-2xl max-w-md w-full my-8">
       <!-- Header -->
@@ -10,8 +11,8 @@
       >
         <h2 class="text-2xl font-bold text-white font-poppins">Add Category</h2>
         <button
-          @click="$emit('close')"
-          class="text-white hover:bg-white hover:text-purple-600 rounded-full w-8 h-8 flex items-center justify-center transition"
+          @click="closeModal"
+          class="text-white hover:bg-white hover:text-purple-600 rounded-full w-8 h-8 flex items-center justify-center transition cursor-pointer"
         >
           ✕
         </button>
@@ -26,11 +27,28 @@
             Category Name *
           </label>
           <input
-            v-model="categoryName"
+            v-model="category.name"
             type="text"
             required
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-poppins"
             placeholder="e.g., Technology, Science"
+            @keydown.esc="closeModal"
+          />
+        </div>
+
+        <div>
+          <label
+            class="block text-sm font-semibold text-gray-700 font-poppins mb-2"
+          >
+            Category Description *
+          </label>
+          <input
+            v-model="category.description"
+            type="text"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-poppins"
+            placeholder="e.g., All tech-related terms"
+            @keydown.esc="closeModal"
           />
         </div>
 
@@ -38,14 +56,14 @@
         <div class="flex gap-4 pt-4 border-t border-gray-200">
           <button
             type="submit"
-            class="flex-1 bg-purple-500 hover:bg-purple-600 text-white font-poppins py-3 px-4 rounded-lg transition-colors"
+            class="flex-1 bg-purple-500 hover:bg-purple-600 text-white font-poppins py-3 px-4 rounded-lg transition-colors cursor-pointer"
           >
             Add
           </button>
           <button
             type="button"
-            @click="$emit('close')"
-            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-poppins py-3 px-4 rounded-lg transition-colors"
+            @click="closeModal"
+            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-poppins py-3 px-4 rounded-lg transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -56,17 +74,38 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 
 const emit = defineEmits(["save", "close"]);
-const categoryName = ref("");
+const category = ref({
+  name: "",
+  description: "",
+});
+
+const closeModal = () => {
+  emit("close");
+  category.value.name = "";
+  category.value.description = "";
+};
+
+const handleKeydown = (e) => {
+  if (e.key === "Escape") closeModal();
+};
 
 const submit = () => {
-  if (categoryName.value.trim()) {
-    emit("save", { name: categoryName.value });
-    categoryName.value = "";
+  if (category.value.name.trim() || category.value.description.trim()) {
+    emit("save", {
+      name: category.value.name,
+      description: category.value.description,
+    });
+    category.value.name = "";
+    category.value.description = "";
+    emit("close");
   }
 };
+
+onMounted(() => window.addEventListener("keydown", handleKeydown));
+onUnmounted(() => window.removeEventListener("keydown", handleKeydown));
 </script>
 
 <style scoped>

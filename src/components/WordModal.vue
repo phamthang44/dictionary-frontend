@@ -1,7 +1,8 @@
 <!-- filepath: src/components/WordModal.vue -->
 <template>
   <div
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto"
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto"
+    @click.self="closeModal"
   >
     <div class="bg-white rounded-lg shadow-2xl max-w-2xl w-full my-8">
       <!-- Header -->
@@ -13,7 +14,7 @@
         </h2>
         <button
           @click="$emit('close')"
-          class="text-white hover:bg-white hover:text-blue-600 rounded-full w-8 h-8 flex items-center justify-center transition"
+          class="text-white hover:bg-white hover:text-blue-600 rounded-full w-8 h-8 flex items-center justify-center transition cursor-pointer"
         >
           ✕
         </button>
@@ -79,15 +80,14 @@
             Category *
           </label>
           <select
-            v-model.number="formData.categoryId"
-            required
+            v-model="formData.category"
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-poppins"
           >
             <option value="">Select a category</option>
             <option
               v-for="category in categories"
-              :key="category.id"
-              :value="category.id"
+              :key="category._id"
+              :value="category._id"
             >
               {{ category.name }}
             </option>
@@ -103,12 +103,12 @@
           </label>
           <div class="space-y-2">
             <div
-              v-for="(example, index) in formData.examples"
+              v-for="(example, index) in formData.exampleSentence"
               :key="index"
               class="flex gap-2"
             >
               <input
-                v-model="formData.examples[index]"
+                v-model="formData.exampleSentence[index]"
                 type="text"
                 class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-poppins"
                 placeholder="Enter an example"
@@ -116,7 +116,7 @@
               <button
                 type="button"
                 @click="removeExample(index)"
-                class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors"
+                class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition-colors cursor-pointer font-poppins"
               >
                 Remove
               </button>
@@ -124,7 +124,7 @@
             <button
               type="button"
               @click="addExample"
-              class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-poppins py-2 px-4 rounded-lg transition-colors"
+              class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-poppins py-2 px-4 rounded-lg transition-colors cursor-pointer"
             >
               + Add Example
             </button>
@@ -135,14 +135,14 @@
         <div class="flex gap-4 pt-4 border-t border-gray-200">
           <button
             type="submit"
-            class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-poppins py-3 px-4 rounded-lg transition-colors"
+            class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-poppins py-3 px-4 rounded-lg transition-colors cursor-pointer"
           >
             {{ word ? "Update" : "Add" }}
           </button>
           <button
             type="button"
             @click="$emit('close')"
-            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-poppins py-3 px-4 rounded-lg transition-colors"
+            class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-poppins py-3 px-4 rounded-lg transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -153,7 +153,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted, onUnmounted } from "vue";
 
 const props = defineProps({
   word: Object,
@@ -166,8 +166,8 @@ const formData = ref({
   word: "",
   pronunciation: "",
   definition: "",
-  categoryId: "",
-  examples: [""],
+  category: "",
+  exampleSentence: [""],
 });
 
 watch(
@@ -180,8 +180,8 @@ watch(
         word: "",
         pronunciation: "",
         definition: "",
-        categoryId: "",
-        examples: [""],
+        category: "",
+        exampleSentence: [""],
       };
     }
   },
@@ -189,19 +189,42 @@ watch(
 );
 
 const addExample = () => {
-  formData.value.examples.push("");
+  formData.value.exampleSentence.push("");
 };
 
 const removeExample = (index) => {
-  formData.value.examples.splice(index, 1);
+  formData.value.exampleSentence.splice(index, 1);
 };
 
 const submit = () => {
-  formData.value.examples = formData.value.examples.filter(
+  if (
+    !formData.value.word.trim() ||
+    !formData.value.definition.trim() ||
+    !formData.value.category
+  ) {
+    return;
+  }
+
+  if (!formData.value.category) {
+    return;
+  }
+
+  formData.value.exampleSentence = formData.value.exampleSentence.filter(
     (e) => e.trim() !== ""
   );
   emit("save", { ...formData.value });
 };
+
+const closeModal = () => {
+  emit("close");
+};
+
+const handleKeydown = (e) => {
+  if (e.key === "Escape") closeModal();
+};
+
+onMounted(() => window.addEventListener("keydown", handleKeydown));
+onUnmounted(() => window.removeEventListener("keydown", handleKeydown));
 </script>
 
 <style scoped>
