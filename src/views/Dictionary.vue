@@ -436,10 +436,10 @@ const saveWord = async (word) => {
     }
     alertTitle.value = "Success!";
     showAlert.value = true;
-    await fetchWords();
-    await fetchCategoryWordCounts(); // Update counts
     showWordModal.value = false;
     editingWord.value = null;
+    await fetchWords();
+    await fetchCategoryWordCounts(); // Update counts
   } catch (err) {
     console.error("❌ Error saving word:", err);
   }
