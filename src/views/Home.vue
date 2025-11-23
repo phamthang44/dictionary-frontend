@@ -31,7 +31,7 @@
             </router-link>
             <button
               @click="scrollToFeatures"
-              class="border-2 border-blue-600 text-blue-600 font-poppins py-4 px-8 rounded-lg hover:bg-blue-50 transition-colors"
+              class="cursor-pointer border-2 border-blue-600 text-blue-600 font-poppins py-4 px-8 rounded-lg hover:bg-blue-50 transition-colors"
             >
               Learn More
             </button>
@@ -151,34 +151,6 @@
           <p class="text-gray-600 font-poppins">
             Monitor your learning progress with detailed statistics and insights
             about your vocabulary growth.
-          </p>
-        </div>
-
-        <!-- Feature Card 5 -->
-        <div
-          class="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow hover:translate-y-[-4px]"
-        >
-          <div class="text-4xl mb-4">🎯</div>
-          <h3 class="text-2xl font-bold text-gray-800 font-poppins mb-3">
-            Learning Goals
-          </h3>
-          <p class="text-gray-600 font-poppins">
-            Set and achieve vocabulary learning goals to stay motivated and
-            consistent with your studies.
-          </p>
-        </div>
-
-        <!-- Feature Card 6 -->
-        <div
-          class="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow hover:translate-y-[-4px]"
-        >
-          <div class="text-4xl mb-4">💾</div>
-          <h3 class="text-2xl font-bold text-gray-800 font-poppins mb-3">
-            Cloud Sync
-          </h3>
-          <p class="text-gray-600 font-poppins">
-            Access your dictionary from any device with automatic cloud
-            synchronization and backup.
           </p>
         </div>
       </div>

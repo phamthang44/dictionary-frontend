@@ -9,7 +9,9 @@
       <div
         class="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4 flex justify-between items-center"
       >
-        <h2 class="text-2xl font-bold text-white font-poppins">Add Category</h2>
+        <h2 class="text-2xl font-bold text-white font-poppins">
+          {{ mode }} Category
+        </h2>
         <button
           @click="closeModal"
           class="text-white hover:bg-white hover:text-purple-600 rounded-full w-8 h-8 flex items-center justify-center transition cursor-pointer"
@@ -58,7 +60,7 @@
             type="submit"
             class="flex-1 bg-purple-500 hover:bg-purple-600 text-white font-poppins py-3 px-4 rounded-lg transition-colors cursor-pointer"
           >
-            Add
+            Save
           </button>
           <button
             type="button"
@@ -74,13 +76,36 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
+
+const props = defineProps({
+  mode: {
+    type: String,
+    default: "Add", // or "Edit"
+  },
+  data: {
+    type: Object,
+    default: null,
+  },
+});
 
 const emit = defineEmits(["save", "close"]);
 const category = ref({
   name: "",
   description: "",
 });
+
+watch(
+  () => props.data,
+  (newData) => {
+    if (newData) {
+      category.value = { ...newData };
+    } else {
+      category.value = { name: "", description: "" };
+    }
+  },
+  { immediate: true }
+);
 
 const closeModal = () => {
   emit("close");
@@ -95,6 +120,7 @@ const handleKeydown = (e) => {
 const submit = () => {
   if (category.value.name.trim() || category.value.description.trim()) {
     emit("save", {
+      _id: category.value._id || null,
       name: category.value.name,
       description: category.value.description,
     });

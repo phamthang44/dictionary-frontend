@@ -40,7 +40,6 @@
                 type="text"
                 placeholder="Search words..."
                 class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-poppins"
-                @input="handleSearch"
               />
               <button
                 @click="
@@ -56,7 +55,7 @@
           <!-- Current Filter Display -->
           <div
             v-if="selectedCategory || searchQuery"
-            class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6"
+            class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-center justify-between"
           >
             <p class="text-gray-700 font-poppins">
               <span v-if="selectedCategory" class="font-semibold">
@@ -67,6 +66,22 @@
                 Search: "{{ searchQuery }}"
               </span>
             </p>
+            <div class="flex gap-2">
+              <button
+                v-if="selectedCategory"
+                @click="editCategory(selectedCategory)"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-poppins cursor-pointer py-2 px-4 rounded-full transition-colors"
+              >
+                Edit
+              </button>
+              <button
+                v-if="selectedCategory"
+                @click="showConfirmCategoryModal(selectedCategory)"
+                class="bg-red-500 hover:bg-red-600 text-white font-poppins cursor-pointer py-2 px-4 rounded-full transition-colors"
+              >
+                Delete
+              </button>
+            </div>
           </div>
 
           <!-- Words List -->
@@ -209,11 +224,22 @@
       @cancel="showConfirm = false"
     />
 
+    <!-- Confirm Delete Category Modal -->
+    <ConfirmModalCategory
+      :show="showConfirmCategory"
+      title="Remove this category?"
+      message="This action cannot be undone!"
+      @confirm="handleDeleteCategoryConfirm"
+      @cancel="showConfirmCategory = false"
+    />
+
     <!-- Category Modal -->
     <CategoryModal
       v-if="showCategoryModal"
+      :data="editingCategory"
+      :mode="mode"
       @save="saveCategory"
-      @close="showCategoryModal = false"
+      @close="closeModalHandler"
     />
 
     <!-- Alert Modal -->
@@ -237,16 +263,22 @@ import ConfirmModal from "../components/ConfirmModal.vue";
 import Sidebar from "../components/Sidebar.vue";
 import SpinnerLoading from "../components/SpinnerLoading.vue";
 import AlertModal from "../components/AlertModal.vue";
+import ConfirmModalCategory from "../components/ConfirmModalCategory.vue";
 import { useDebounce } from "../composables/useDebounce.js";
 
 const showWordModal = ref(false);
 const showCategoryModal = ref(false);
 const editingWord = ref(null);
 
+const showConfirmCategory = ref(false);
+const categoryToDelete = ref(null);
+
 const searchQuery = ref("");
 const debouncedSearch = useDebounce(searchQuery, 1000);
 
 const selectedCategory = ref(null);
+const editingCategory = ref(null);
+const mode = ref("Add");
 
 const showConfirm = ref(false);
 const deleteId = ref(null);
@@ -277,7 +309,6 @@ onMounted(async () => {
       categories.value = cres.data.data.data;
       await fetchCategoryWordCounts();
     }
-
     await fetchWords();
   } catch (err) {
     console.error("Error fetching data:", err?.response?.data);
@@ -295,7 +326,8 @@ const fetchCategoryWordCounts = async () => {
         limit: 1,
         search: category.name,
       });
-      const total = response.data.data.items?.length || 0;
+      console.log(response.data.data.pagination.total);
+      const total = response.data.data.pagination.total || 0;
       categoryWordCounts.value[category._id] = total;
     }
     console.log("✅ Category word counts fetched:", categoryWordCounts.value);
@@ -308,49 +340,46 @@ const fetchCategoryWordCounts = async () => {
 const fetchWords = async () => {
   try {
     isLoading.value = true;
-    let searchValue = "";
     const params = {
       page: currentPage.value,
       limit: pageSize.value,
-      search: searchValue,
     };
 
+    //  Priority - Category filter OR search query, not both
     if (selectedCategory.value) {
       // Get the category name
       const categoryName = getCategoryName(selectedCategory.value);
-
-      searchValue = categoryName;
-
-      params.search = searchValue;
-    }
-    if (searchQuery.value.trim()) {
+      params.search = categoryName;
+      console.log("🔍 Fetching words for category:", categoryName);
+    } else if (searchQuery.value.trim()) {
       params.search = searchQuery.value;
+      console.log("🔍 Fetching words for search:", searchQuery.value);
+    } else {
+      console.log("🔍 Fetching all words");
     }
 
-    //onsole.log("Fetching words with params:", params.search);
     const wordsResponse = await wordApi.getAll(params);
 
-    // Adjust based on your API response structure
     words.value = wordsResponse.data.data.items;
-    //console.log("params", words.value);
-    // console.log("wordsResponse", wordsResponse.data.data.pagination);
-
     totalItems.value = wordsResponse.data.data.pagination.total;
     totalPages.value = wordsResponse.data.data.pagination.totalPages;
-
-    // console.log("total pages", totalPages.value);
-
-    // console.log("✅ Words fetched:", words.value);
   } catch (err) {
     console.error("❌ Error fetching words:", err?.response?.data);
   } finally {
     isLoading.value = false;
   }
 };
-
+//6922813fd9c5a18adb2bf495
 const handleSelectCategory = (categoryId) => {
-  //console.log("🔍 Selected category ID:", categoryId);
-  selectedCategory.value = categoryId;
+  if (selectedCategory.value === categoryId) {
+    selectedCategory.value = null;
+    searchQuery.value = "";
+    console.log("📌 Deselected category, showing all");
+  } else {
+    selectedCategory.value = categoryId;
+    searchQuery.value = ""; // ✅ Clear search when selecting category
+    console.log("📌 Selected category:", categoryId);
+  }
   currentPage.value = 1;
   fetchWords();
 };
@@ -359,14 +388,12 @@ const getCategoryName = (categoryId) => {
   return categories.value.find((c) => c._id === categoryId)?.name || "Unknown";
 };
 
-const handleSearch = () => {
-  selectedCategory.value = null;
+watch(debouncedSearch, () => {
+  console.log("🔍 Debounced search triggered:", debouncedSearch.value);
+  selectedCategory.value = null; // Clear category when searching
   currentPage.value = 1;
-  watch(debouncedSearch, (val) => {
-    console.log("🔍 Searching for:", val);
-    fetchWords();
-  });
-};
+  fetchWords();
+});
 
 const goToPage = (page) => {
   currentPage.value = page;
@@ -428,8 +455,6 @@ const saveWord = async (word) => {
       response = await wordApi.create(word);
       const created = response.data.data;
       currentPage.value = 1;
-      // await fetchWords();
-      // console.log("✅ Word created:", created);
       if (!isLoading.value) {
         alertMessage.value = `${created.word} added successfully!`;
       }
@@ -448,6 +473,75 @@ const saveWord = async (word) => {
 const editWord = (word) => {
   editingWord.value = { ...word };
   showWordModal.value = true;
+};
+
+const editCategory = (categoryId) => {
+  const categoryToEdit = categories.value.find((c) => c._id === categoryId);
+  console.log("✏️ Editing category:", categoryToEdit);
+  if (categoryToEdit) {
+    editingCategory.value = { ...categoryToEdit };
+    mode.value = "Edit";
+    showCategoryModal.value = true;
+  }
+};
+
+const closeModalHandler = () => {
+  showCategoryModal.value = false;
+  editingCategory.value = null;
+  mode.value = "Add";
+};
+
+const openCategoryModal = () => {
+  editingCategory.value = null;
+  mode.value = "Add";
+  showCategoryModal.value = true;
+};
+
+const deleteCategory = (categoryId) => {
+  // ✅ FIX: Show confirm modal instead of deleting directly
+  categoryToDelete.value = categoryId;
+  showConfirmCategory.value = true;
+};
+
+const handleDeleteCategoryConfirm = async () => {
+  try {
+    isLoading.value = true;
+    await categoryApi.delete(categoryToDelete.value);
+
+    // Remove from categories array
+    categories.value = categories.value.filter(
+      (c) => c._id !== categoryToDelete.value
+    );
+
+    // Clear selected category if it was deleted
+    if (selectedCategory.value === categoryToDelete.value) {
+      selectedCategory.value = null;
+    }
+
+    // Close modal and show alert
+    showConfirmCategory.value = false;
+    alertTitle.value = "Deleted!";
+    alertMessage.value = "Category deleted successfully!";
+    showAlert.value = true;
+
+    // Refresh counts and words
+    await fetchCategoryWordCounts();
+    await fetchWords();
+
+    console.log("✅ Category deleted successfully!");
+  } catch (err) {
+    console.error("❌ Error deleting category:", err);
+    alertTitle.value = "Error!";
+    alertMessage.value = "Failed to delete category. Please try again.";
+    showAlert.value = true;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const showConfirmCategoryModal = (categoryId) => {
+  categoryToDelete.value = categoryId;
+  showConfirmCategory.value = true;
 };
 
 const openConfirm = (id) => {
@@ -485,15 +579,72 @@ const handleDeleteConfirm = async () => {
 const saveCategory = async (category) => {
   try {
     isLoading.value = true;
-    const response = await categoryApi.create(category);
-    categories.value.push(response.data.data);
+    let response;
+
+    if (category._id) {
+      // UPDATE
+      response = await categoryApi.update(category._id, category);
+      console.log("✅ Category updated:", response.data.data);
+
+      const index = categories.value.findIndex((c) => c._id === category._id);
+      if (index !== -1) {
+        categories.value[index] = response.data.data;
+      }
+
+      alertTitle.value = "Success!";
+      alertMessage.value = `${response.data.data.name} updated successfully!`;
+    } else {
+      // CREATE
+      response = await categoryApi.create(category);
+      console.log("✅ Category created:", response.data.data);
+
+      categories.value.push(response.data.data);
+      console.log(response.data.data._id);
+      selectedCategory.value = response.data.data._id;
+      console.log(
+        "📌 New category selected:",
+        selectedCategory.value,
+        response.data.data.name
+      );
+      searchQuery.value = "";
+      currentPage.value = 1;
+
+      alertTitle.value = "Success!";
+      alertMessage.value = `${response.data.data.name} created successfully!`;
+    }
+
     showCategoryModal.value = false;
-    console.log("✅ Category created:", response.data.data);
+    showAlert.value = true;
+
+    await fetchCategoryWordCountsForCategory(response.data.data._id);
+
+    await fetchWords();
   } catch (err) {
-    console.error("❌ Error creating category:", err);
-    alert("❌ Error creating category!");
+    console.error("❌ Error saving category:", err);
+    alertTitle.value = "Error!";
+    alertMessage.value = "Failed to save category. Please try again.";
+    showAlert.value = true;
   } finally {
     isLoading.value = false;
+  }
+};
+
+// ✅ NEW: Fetch count for a single category
+const fetchCategoryWordCountsForCategory = async (categoryId) => {
+  try {
+    const category = categories.value.find((c) => c._id === categoryId);
+    if (category) {
+      const response = await wordApi.getAll({
+        page: 1,
+        limit: 1,
+        search: category.name,
+      });
+      const total = response.data.data.pagination?.total || 0;
+      categoryWordCounts.value[categoryId] = total;
+      console.log(`✅ Category ${category.name} count updated: ${total}`);
+    }
+  } catch (err) {
+    console.error("❌ Error fetching category count:", err);
   }
 };
 </script>

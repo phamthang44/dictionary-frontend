@@ -13,6 +13,9 @@ export const categoryApi = {
     return api.get(`/categories/${id}`);
   },
   create(data) {
+    if (data && !data._id) {
+      delete data._id;
+    }
     return api.post("/categories", data);
   },
   update(id, data) {
