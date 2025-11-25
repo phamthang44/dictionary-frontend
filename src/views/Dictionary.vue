@@ -321,19 +321,21 @@ const fetchCategoryWordCounts = async () => {
   categoryWordCounts.value = {};
   try {
     for (const category of categories.value) {
+      // --- SỬA ĐOẠN NÀY ---
       const response = await wordApi.getAll({
         page: 1,
         limit: 1,
-        search: category.name,
+        categoryId: category._id, // Lọc theo ID chính xác
+        search: "", // Đảm bảo không search text
       });
-      console.log(response.data.data.pagination.total);
+      // --------------------
+
       const total = response.data.data.pagination.total || 0;
       categoryWordCounts.value[category._id] = total;
     }
     console.log("✅ Category word counts fetched:", categoryWordCounts.value);
   } catch (err) {
     console.error("❌ Error fetching category counts:", err);
-    categoryWordCounts.value[category._id] = 0;
   }
 };
 
@@ -345,18 +347,21 @@ const fetchWords = async () => {
       limit: pageSize.value,
     };
 
-    //  Priority - Category filter OR search query, not both
+    // --- SỬA ĐOẠN NÀY ---
     if (selectedCategory.value) {
-      // Get the category name
-      const categoryName = getCategoryName(selectedCategory.value);
-      params.search = categoryName;
-      console.log("🔍 Fetching words for category:", categoryName);
+      // Nếu đang chọn danh mục -> Gửi categoryId để lọc cứng
+      params.categoryId = selectedCategory.value;
+      params.search = ""; // Không search text
+      console.log("🔍 Fetching words for category ID:", selectedCategory.value);
     } else if (searchQuery.value.trim()) {
+      // Nếu đang search text -> Gửi text search
       params.search = searchQuery.value;
+      params.categoryId = null;
       console.log("🔍 Fetching words for search:", searchQuery.value);
     } else {
       console.log("🔍 Fetching all words");
     }
+    // --------------------
 
     const wordsResponse = await wordApi.getAll(params);
 
@@ -637,7 +642,8 @@ const fetchCategoryWordCountsForCategory = async (categoryId) => {
       const response = await wordApi.getAll({
         page: 1,
         limit: 1,
-        search: category.name,
+        categoryId: category._id, // Đúng
+        search: "", // Thêm dòng này cho chắc chắn
       });
       const total = response.data.data.pagination?.total || 0;
       categoryWordCounts.value[categoryId] = total;
