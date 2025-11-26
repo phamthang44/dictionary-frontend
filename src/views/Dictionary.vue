@@ -186,21 +186,24 @@ const alertMessage = ref("");
 
 onMounted(async () => {
   isLoading.value = true;
+
   try {
-    // await Promise.all([fetchCategories(), fetchWords()]);
-    await Promise.all([fetchCategories(), fetchWords()]);
-
-    await fetchCategoryWordCounts();
-
-    console.log("✅ Initial data fetch complete.", {
-      categories: categories.value,
-      categoryWordCounts: categoryWordCounts.value,
-      words: words.value,
-    });
+    await Promise.all([
+      fetchCategories(),
+      fetchWords(),
+      new Promise((resolve) => setTimeout(resolve, 800)),
+    ]);
   } catch (err) {
-    console.error("❌ Error during initial data fetch:", err);
+    console.error(err);
   } finally {
     isLoading.value = false;
+  }
+
+  try {
+    console.log("Fetching counts in background...");
+    await fetchCategoryWordCounts();
+  } catch (err) {
+    console.error("Count fetch error:", err);
   }
 });
 
