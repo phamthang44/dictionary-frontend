@@ -23,19 +23,22 @@
         <button
           @click="$emit('selectCategory', null)"
           :class="[
-            'w-full group relative px-8 py-4 rounded-lg font-poppins font-semibold transition-all duration-300 text-left overflow-hidden cursor-pointer',
+            'w-full group relative px-2 py-4 rounded-lg font-poppins font-semibold transition-all duration-300 text-left overflow-hidden cursor-pointer border',
             !selectedCategory
-              ? 'bg-gradient-to-r from-purple-600/80 to-pink-600/80 text-white border border-purple-400/50 shadow-lg shadow-purple-500/30'
-              : 'bg-slate-800/50 text-gray-300 border border-purple-500/20 hover:bg-slate-700/50 hover:border-purple-400/50 hover:shadow-md hover:shadow-purple-500/20',
+              ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white border-blue-400/60 shadow-lg shadow-blue-500/40'
+              : 'bg-slate-800/50 text-gray-300 border-slate-600/50 hover:bg-slate-700/50 hover:border-blue-500/50 hover:shadow-md hover:shadow-blue-500/20',
           ]"
         >
-          <span class="relative z-10 flex items-center justify-between">
-            <span>All Categories</span>
+          <span class="relative z-10 flex items-center justify-between gap-2">
+            <span class="flex items-center gap-2">
+              <span>🎯</span>
+              <span>All Categories</span>
+            </span>
             <span
               v-if="!selectedCategory"
-              class="text-sm bg-purple-500/30 px-3 py-1 rounded-full"
+              class="text-xs font-bold px-3 py-1.5 rounded-full bg-yellow-400/90 text-slate-900 whitespace-nowrap animate-pulse"
             >
-              Active
+              ● Active
             </span>
           </span>
         </button>
