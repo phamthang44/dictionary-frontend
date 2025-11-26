@@ -2,31 +2,51 @@
 <template>
   <div
     v-if="show"
-    class="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50"
+    class="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 overflow-y-auto"
     @click.self="cancel"
   >
-    <div class="bg-white rounded-lg shadow-2xl w-96">
-      <div class="bg-red-500 px-6 py-4 rounded-t-lg">
-        <h2 class="text-xl font-semibold text-white font-poppins">
+    <div
+      class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl shadow-red-500/30 max-w-md w-full border border-red-500/30 overflow-hidden transform transition-all duration-300"
+    >
+      <!-- Header with Icon -->
+      <div
+        class="bg-gradient-to-r from-red-600/80 via-orange-600/80 to-red-600/80 px-8 py-8 text-center border-b border-red-500/30 backdrop-blur-sm"
+      >
+        <div class="flex justify-center mb-4">
+          <div class="text-6xl animate-pulse">🗑️</div>
+        </div>
+        <h2 class="text-2xl font-bold text-white font-poppins">
           {{ title }}
         </h2>
+        <p class="text-red-100 text-sm font-poppins mt-2">
+          This action cannot be undone
+        </p>
       </div>
-      <div class="p-6">
-        <p class="mb-6 text-gray-700 font-poppins">{{ message }}</p>
-        <div class="flex justify-end space-x-4">
-          <button
-            @click="confirm"
-            class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition-colors font-poppins font-semibold cursor-pointer"
-          >
-            Confirm Delete
-          </button>
-          <button
-            @click="cancel"
-            class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg transition-colors font-poppins font-semibold cursor-pointer"
-          >
-            Cancel
-          </button>
-        </div>
+
+      <!-- Message Content -->
+      <div class="px-8 py-6">
+        <p class="text-gray-300 text-center font-poppins leading-relaxed">
+          {{ message }}
+        </p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="px-8 py-6 flex gap-4 border-t border-red-500/20">
+        <button
+          @click="confirm"
+          class="flex-1 group relative px-6 py-3 bg-gradient-to-r from-red-600 to-orange-600 text-white font-poppins font-semibold rounded-lg overflow-hidden hover:shadow-lg hover:shadow-red-500/50 transition-all duration-300 transform hover:scale-105 cursor-pointer"
+        >
+          <span class="relative z-10">🗑️ Delete</span>
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+          ></div>
+        </button>
+        <button
+          @click="cancel"
+          class="flex-1 px-6 py-3 bg-slate-700/50 hover:bg-slate-600/50 text-gray-300 hover:text-white font-poppins font-semibold rounded-lg border border-slate-600/50 hover:border-slate-500/50 transition-all duration-300 cursor-pointer"
+        >
+          Cancel
+        </button>
       </div>
     </div>
   </div>
@@ -67,5 +87,31 @@ onUnmounted(() => window.removeEventListener("keydown", handleKeydown));
 <style scoped>
 * {
   font-family: "Poppins", sans-serif;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Smooth modal entry animation */
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 </style>

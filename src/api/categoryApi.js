@@ -24,4 +24,9 @@ export const categoryApi = {
   delete(id) {
     return api.delete(`/categories/${id}`);
   },
+  getWordsByCategory({ categoryId, page = 1, limit = 10 }) {
+    return api.get(`/categories/${categoryId}/words`, {
+      params: { page, limit },
+    });
+  },
 };

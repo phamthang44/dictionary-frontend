@@ -1,82 +1,155 @@
-<!-- filepath: src/views/Home.vue -->
 <template>
   <div
-    class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"
+    class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden"
   >
+    <!-- Animated-->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+      <div
+        class="absolute top-0 left-0 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob"
+      ></div>
+      <div
+        class="absolute top-0 right-0 w-96 h-96 bg-blue-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob animation-delay-2000"
+      ></div>
+      <div
+        class="absolute -bottom-8 left-20 w-96 h-96 bg-pink-600 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob animation-delay-4000"
+      ></div>
+    </div>
+
     <!-- Hero Section -->
-    <section class="max-w-7xl mx-auto px-6 py-20">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <section class="relative max-w-7xl mx-auto px-6 py-32 z-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
         <!-- Left Content -->
-        <div class="space-y-6">
-          <h1
-            class="text-5xl md:text-6xl font-bold text-gray-800 font-poppins leading-tight"
-          >
-            Build Your
-            <span
-              class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600"
+        <div class="space-y-8">
+          <div class="space-y-4">
+            <div
+              class="inline-block px-4 py-2 bg-purple-500/20 border border-purple-500/50 rounded-full text-sm font-poppins"
             >
-              Vocabulary
-            </span>
-          </h1>
-          <p class="text-xl text-gray-600 font-poppins">
-            Master new words, track your learning progress, and expand your
-            knowledge with our beautiful dictionary application.
+              ✨ Master Your Vocabulary
+            </div>
+            <h1
+              class="text-6xl md:text-7xl font-bold font-poppins leading-tight"
+            >
+              Unlock Your
+              <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 animate-pulse"
+              >
+                Linguistic Power
+              </span>
+            </h1>
+          </div>
+          <p class="text-xl text-gray-300 font-poppins leading-relaxed">
+            Dive into a mystical journey of language discovery. Build, organize,
+            and master your vocabulary with an elegant dictionary crafted for
+            learners who dare to grow.
           </p>
-          <div class="flex gap-4 pt-4">
+
+          <div class="flex gap-4 pt-8">
             <router-link
               to="/dictionary"
-              class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-poppins py-4 px-8 rounded-lg hover:shadow-lg transition-all transform hover:scale-105"
+              class="group relative px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-poppins rounded-lg font-semibold overflow-hidden hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105"
             >
-              Get Started →
+              <span class="relative z-10 flex items-center gap-2">
+                Begin Your Quest →
+              </span>
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity"
+              ></div>
             </router-link>
             <button
               @click="scrollToFeatures"
-              class="cursor-pointer border-2 border-blue-600 text-blue-600 font-poppins py-4 px-8 rounded-lg hover:bg-blue-50 transition-colors"
+              class="cursor-pointer px-8 py-4 border-2 border-purple-500/50 text-purple-300 font-poppins rounded-lg hover:bg-purple-500/10 hover:border-purple-400 transition-all duration-300 backdrop-blur-sm"
             >
-              Learn More
+              Explore Features
             </button>
+          </div>
+
+          <!-- Trust Stats -->
+          <div
+            class="grid grid-cols-3 gap-4 pt-8 border-t border-purple-500/20"
+          >
+            <div>
+              <div class="text-3xl font-bold text-purple-400 font-poppins">
+                2.5K+
+              </div>
+              <p class="text-gray-400 text-sm font-poppins">Words Tracked</p>
+            </div>
+            <div>
+              <div class="text-3xl font-bold text-pink-400 font-poppins">
+                15
+              </div>
+              <p class="text-gray-400 text-sm font-poppins">Categories</p>
+            </div>
+            <div>
+              <div class="text-3xl font-bold text-blue-400 font-poppins">
+                85%
+              </div>
+              <p class="text-gray-400 text-sm font-poppins">Growth Rate</p>
+            </div>
           </div>
         </div>
 
-        <!-- Right Image -->
-        <div class="relative">
+        <!-- Right Visual Card -->
+        <div class="relative group">
           <div
-            class="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-2xl blur-3xl opacity-20"
+            class="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-2xl blur-2xl group-hover:blur-3xl transition-all duration-300"
           ></div>
           <div
-            class="relative bg-white rounded-2xl shadow-2xl p-8 transform hover:scale-105 transition-transform"
+            class="relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-purple-500/30 rounded-2xl p-8 backdrop-blur-xl hover:border-purple-400/50 transition-all duration-300"
           >
-            <div class="space-y-4">
-              <div class="flex items-center gap-4 p-4 bg-blue-50 rounded-lg">
-                <span class="text-3xl">📚</span>
+            <div class="space-y-6">
+              <!-- Card 1 -->
+              <div
+                class="group/card flex items-start gap-4 p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl border border-purple-500/20 hover:border-purple-400/50 transition-all duration-300 cursor-pointer"
+              >
+                <div
+                  class="text-4xl group-hover/card:scale-110 transition-transform duration-300"
+                >
+                  📚
+                </div>
                 <div>
-                  <p class="font-bold text-gray-800 font-poppins">
-                    2,450 Words
+                  <p class="font-bold text-white font-poppins">
+                    Smart Organization
                   </p>
-                  <p class="text-sm text-gray-600 font-poppins">
-                    Added to collection
+                  <p class="text-sm text-gray-400 font-poppins">
+                    Auto-categorize your words
                   </p>
                 </div>
               </div>
-              <div class="flex items-center gap-4 p-4 bg-indigo-50 rounded-lg">
-                <span class="text-3xl">🎯</span>
+
+              <!-- Card 2 -->
+              <div
+                class="group/card flex items-start gap-4 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20 hover:border-blue-400/50 transition-all duration-300 cursor-pointer"
+              >
+                <div
+                  class="text-4xl group-hover/card:scale-110 transition-transform duration-300"
+                >
+                  ⚡
+                </div>
                 <div>
-                  <p class="font-bold text-gray-800 font-poppins">
-                    15 Categories
+                  <p class="font-bold text-white font-poppins">
+                    Lightning Fast Search
                   </p>
-                  <p class="text-sm text-gray-600 font-poppins">
-                    Organized by topic
+                  <p class="text-sm text-gray-400 font-poppins">
+                    Find any word instantly
                   </p>
                 </div>
               </div>
-              <div class="flex items-center gap-4 p-4 bg-purple-50 rounded-lg">
-                <span class="text-3xl">📈</span>
+
+              <!-- Card 3 -->
+              <div
+                class="group/card flex items-start gap-4 p-4 bg-gradient-to-r from-pink-500/10 to-blue-500/10 rounded-xl border border-pink-500/20 hover:border-pink-400/50 transition-all duration-300 cursor-pointer"
+              >
+                <div
+                  class="text-4xl group-hover/card:scale-110 transition-transform duration-300"
+                >
+                  📈
+                </div>
                 <div>
-                  <p class="font-bold text-gray-800 font-poppins">
-                    85% Progress
+                  <p class="font-bold text-white font-poppins">
+                    Visual Progress Tracking
                   </p>
-                  <p class="text-sm text-gray-600 font-poppins">
-                    Learning goals achieved
+                  <p class="text-sm text-gray-400 font-poppins">
+                    Watch your growth unfold
                   </p>
                 </div>
               </div>
@@ -87,126 +160,136 @@
     </section>
 
     <!-- Features Section -->
-    <section ref="featuresSection" class="max-w-7xl mx-auto px-6 py-20">
-      <div class="text-center mb-16">
-        <h2 class="text-4xl font-bold text-gray-800 font-poppins mb-4">
-          Powerful Features
+    <section
+      ref="featuresSection"
+      class="relative max-w-7xl mx-auto px-6 py-32 z-10"
+    >
+      <div class="text-center mb-20">
+        <h2 class="text-5xl md:text-6xl font-bold text-white font-poppins mb-4">
+          Mystical Features
         </h2>
-        <p class="text-xl text-gray-600 font-poppins">
-          Everything you need to master your vocabulary
+        <p class="text-xl text-gray-400 font-poppins max-w-2xl mx-auto">
+          Powerful tools designed to elevate your vocabulary mastery
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Feature Card 1 -->
-        <div
-          class="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow hover:translate-y-[-4px]"
-        >
-          <div class="text-4xl mb-4">✏️</div>
-          <h3 class="text-2xl font-bold text-gray-800 font-poppins mb-3">
-            Add & Edit Words
-          </h3>
-          <p class="text-gray-600 font-poppins">
-            Easily add new words with pronunciation, definitions, and examples
-            to build your personal dictionary.
-          </p>
-        </div>
-
-        <!-- Feature Card 2 -->
-        <div
-          class="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow hover:translate-y-[-4px]"
-        >
-          <div class="text-4xl mb-4">🏷️</div>
-          <h3 class="text-2xl font-bold text-gray-800 font-poppins mb-3">
-            Organize by Category
-          </h3>
-          <p class="text-gray-600 font-poppins">
-            Categorize words by subject, difficulty level, or any custom
-            category that works for you.
-          </p>
-        </div>
-
-        <!-- Feature Card 3 -->
-        <div
-          class="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow hover:translate-y-[-4px]"
-        >
-          <div class="text-4xl mb-4">🔍</div>
-          <h3 class="text-2xl font-bold text-gray-800 font-poppins mb-3">
-            Quick Search
-          </h3>
-          <p class="text-gray-600 font-poppins">
-            Find any word instantly with our powerful search functionality and
-            filtering options.
-          </p>
-        </div>
-
-        <!-- Feature Card 4 -->
-        <div
-          class="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow hover:translate-y-[-4px]"
-        >
-          <div class="text-4xl mb-4">📊</div>
-          <h3 class="text-2xl font-bold text-gray-800 font-poppins mb-3">
-            Track Progress
-          </h3>
-          <p class="text-gray-600 font-poppins">
-            Monitor your learning progress with detailed statistics and insights
-            about your vocabulary growth.
-          </p>
-        </div>
-      </div>
+      <FeaturesSection />
     </section>
 
     <!-- Stats Section -->
-    <section
-      class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-20"
-    >
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-          <div>
-            <div class="text-5xl font-bold font-poppins mb-2">10K+</div>
-            <p class="text-blue-100 font-poppins">Active Users</p>
+    <section class="relative max-w-7xl mx-auto px-6 py-32 z-10">
+      <div
+        class="bg-gradient-to-r from-purple-600/10 to-pink-600/10 border border-purple-500/30 rounded-3xl backdrop-blur-xl p-12"
+      >
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <!-- Stat 1 -->
+          <div class="text-center group cursor-pointer">
+            <div
+              class="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 font-poppins group-hover:scale-110 transition-transform duration-300"
+            >
+              10K+
+            </div>
+            <p class="text-gray-400 font-poppins mt-2">Active Learners</p>
+            <div
+              class="w-12 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mt-4 scale-0 group-hover:scale-100 transition-transform duration-300"
+            ></div>
           </div>
-          <div>
-            <div class="text-5xl font-bold font-poppins mb-2">100K+</div>
-            <p class="text-blue-100 font-poppins">Words Added</p>
+
+          <!-- Stat 2 -->
+          <div class="text-center group cursor-pointer">
+            <div
+              class="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 font-poppins group-hover:scale-110 transition-transform duration-300"
+            >
+              500K+
+            </div>
+            <p class="text-gray-400 font-poppins mt-2">Words Mastered</p>
+            <div
+              class="w-12 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mt-4 scale-0 group-hover:scale-100 transition-transform duration-300"
+            ></div>
           </div>
-          <div>
-            <div class="text-5xl font-bold font-poppins mb-2">50+</div>
-            <p class="text-blue-100 font-poppins">Languages</p>
+
+          <!-- Stat 3 -->
+          <div class="text-center group cursor-pointer">
+            <div
+              class="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-blue-400 font-poppins group-hover:scale-110 transition-transform duration-300"
+            >
+              99.9%
+            </div>
+            <p class="text-gray-400 font-poppins mt-2">Uptime</p>
+            <div
+              class="w-12 h-1 bg-gradient-to-r from-pink-500 to-blue-500 rounded-full mx-auto mt-4 scale-0 group-hover:scale-100 transition-transform duration-300"
+            ></div>
           </div>
-          <div>
-            <div class="text-5xl font-bold font-poppins mb-2">99.9%</div>
-            <p class="text-blue-100 font-poppins">Uptime</p>
+
+          <!-- Stat 4 -->
+          <div class="text-center group cursor-pointer">
+            <div
+              class="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400 font-poppins group-hover:scale-110 transition-transform duration-300"
+            >
+              24/7
+            </div>
+            <p class="text-gray-400 font-poppins mt-2">Support</p>
+            <div
+              class="w-12 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mx-auto mt-4 scale-0 group-hover:scale-100 transition-transform duration-300"
+            ></div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- CTA Section -->
-    <section class="max-w-7xl mx-auto px-6 py-20">
-      <div
-        class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-12 text-center border-2 border-blue-200"
-      >
-        <h2 class="text-4xl font-bold text-gray-800 font-poppins mb-4">
-          Ready to Expand Your Vocabulary?
-        </h2>
-        <p class="text-xl text-gray-600 font-poppins mb-8">
-          Start building your dictionary today and track your learning journey.
-        </p>
-        <router-link
-          to="/dictionary"
-          class="inline-block bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-poppins py-4 px-10 rounded-lg hover:shadow-lg transition-all transform hover:scale-105"
+    <section class="relative max-w-7xl mx-auto px-6 py-32 z-10">
+      <div class="relative">
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-purple-600/30 to-pink-600/30 rounded-3xl blur-2xl"
+        ></div>
+        <div
+          class="relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-xl border border-purple-500/30 rounded-3xl p-16 text-center hover:border-purple-400/50 transition-all duration-300"
         >
-          Launch Dictionary →
-        </router-link>
+          <h2
+            class="text-5xl md:text-6xl font-bold text-white font-poppins mb-6"
+          >
+            Ready to Master Your
+            <span
+              class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400"
+            >
+              Vocabulary?
+            </span>
+          </h2>
+          <p class="text-xl text-gray-300 font-poppins mb-10 max-w-2xl mx-auto">
+            Join thousands of language learners who have transformed their
+            vocabulary journey. Start your mystical adventure today.
+          </p>
+          <div class="flex gap-4 justify-center flex-wrap">
+            <router-link
+              to="/dictionary"
+              class="group relative px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-poppins rounded-lg font-semibold overflow-hidden hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105"
+            >
+              <span class="relative z-10 flex items-center gap-2">
+                Begin Your Journey Now →
+              </span>
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity"
+              ></div>
+            </router-link>
+            <button
+              class="px-10 py-5 border-2 border-purple-500/50 text-purple-300 font-poppins rounded-lg hover:bg-purple-500/10 hover:border-purple-400 transition-all duration-300 backdrop-blur-sm cursor-pointer"
+            >
+              Learn More
+            </button>
+          </div>
+        </div>
       </div>
     </section>
+    <!-- Footer -->
+    <Footer />
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-
+import FeaturesSection from "../components/FeaturesSection.vue";
+import Footer from "../components/Footer.vue";
 const featuresSection = ref(null);
 
 const scrollToFeatures = () => {
@@ -217,5 +300,30 @@ const scrollToFeatures = () => {
 <style scoped>
 * {
   font-family: "Poppins", sans-serif;
+}
+
+@keyframes blob {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
 }
 </style>

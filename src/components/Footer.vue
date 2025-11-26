@@ -1,9 +1,10 @@
 <template>
-  <footer class="bg-gray-800 text-gray-300 py-8 mt-12">
-    <div class="max-w-7xl mx-auto px-6 text-center font-poppins">
-      <p>
-        &copy; 2025 Dictionary App. Build your vocabulary, expand your
-        knowledge.
+  <!-- Footer -->
+  <footer class="relative border-t border-purple-500/20 py-12 z-10">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <p class="text-gray-400 font-poppins">
+        © 2025 Vocabulary Master. Crafted with
+        <span class="text-pink-400">💜</span> for language learners.
       </p>
     </div>
   </footer>

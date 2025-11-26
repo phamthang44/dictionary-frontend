@@ -1,156 +1,123 @@
 <!-- filepath: src/components/Sidebar.vue -->
 <template>
   <div class="lg:col-span-1">
-    <div class="bg-white rounded-lg shadow-lg p-6 sticky top-6">
-      <!-- Header with Toggle Button -->
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-bold text-gray-800 font-poppins">Categories</h2>
-        <button
-          @click="isExpanded = !isExpanded"
-          class="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          :title="isExpanded ? 'Collapse' : 'Expand'"
-        >
-          <svg
-            :class="[
-              'w-6 h-6 transition-transform',
-              isExpanded ? 'rotate-180' : '',
-            ]"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Add Category Button -->
-      <button
-        @click="$emit('openCategoryModal')"
-        class="w-full mb-4 bg-blue-500 hover:bg-blue-600 text-white font-poppins py-2 px-4 rounded-lg transition-colors"
-      >
+    <!-- Add Category Button -->
+    <button
+      @click="$emit('openCategoryModal')"
+      class="w-full group relative px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-poppins rounded-lg font-semibold overflow-hidden hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 transform hover:scale-105 mb-6 cursor-pointer"
+    >
+      <span class="relative z-10 flex items-center justify-center gap-2">
         + Add Category
-      </button>
-
-      <!-- Categories List - Collapsible -->
+      </span>
       <div
-        :class="[
-          'space-y-2 transition-all duration-300 ease-in-out overflow-hidden',
-          isExpanded ? 'max-h-96' : 'max-h-40 lg:max-h-96',
-        ]"
-      >
+        class="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity"
+      ></div>
+    </button>
+
+    <!-- Categories Container (Scrollable) -->
+    <div
+      class="bg-slate-800/30 border border-purple-500/20 rounded-2xl p-4 backdrop-blur-sm h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-purple-600 scrollbar-track-slate-800/50"
+    >
+      <div class="space-y-3">
         <!-- All Categories Button -->
         <button
-          @click="selectCategory(null)"
+          @click="$emit('selectCategory', null)"
           :class="[
-            'w-full text-left px-4 py-2 rounded-lg transition-colors font-poppins text-sm',
-            selectedCategory === null
-              ? 'bg-blue-500 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+            'w-full group relative px-8 py-4 rounded-lg font-poppins font-semibold transition-all duration-300 text-left overflow-hidden cursor-pointer',
+            !selectedCategory
+              ? 'bg-gradient-to-r from-purple-600/80 to-pink-600/80 text-white border border-purple-400/50 shadow-lg shadow-purple-500/30'
+              : 'bg-slate-800/50 text-gray-300 border border-purple-500/20 hover:bg-slate-700/50 hover:border-purple-400/50 hover:shadow-md hover:shadow-purple-500/20',
           ]"
         >
-          <div class="flex justify-between items-center">
+          <span class="relative z-10 flex items-center justify-between">
             <span>All Categories</span>
             <span
-              :class="[
-                'text-xs px-2 py-1 rounded',
-                selectedCategory === null
-                  ? 'bg-blue-400 text-white'
-                  : 'bg-gray-300 text-gray-700',
-              ]"
+              v-if="!selectedCategory"
+              class="text-sm bg-purple-500/30 px-3 py-1 rounded-full"
             >
-              {{ totalWordCount }}
+              Active
             </span>
-          </div>
+          </span>
         </button>
 
-        <!-- Category Buttons -->
-        <button
-          v-for="category in categories"
-          :key="category._id"
-          @click="selectCategory(category._id)"
-          :class="[
-            'w-full text-left px-4 py-2 rounded-lg transition-colors font-poppins text-sm',
-            selectedCategory === category._id
-              ? 'bg-blue-500 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-          ]"
-        >
-          <div class="flex justify-between items-center">
-            <span class="truncate">{{ category.name }}</span>
-            <span
+        <!-- Individual Categories -->
+        <div class="space-y-2">
+          <div v-for="category in categories" :key="category._id" class="group">
+            <button
+              @click="$emit('selectCategory', category._id)"
               :class="[
-                'text-xs px-2 py-1 rounded whitespace-nowrap ml-2',
+                'w-full px-6 py-4 rounded-lg font-poppins transition-all duration-300 text-left border overflow-hidden relative group/btn cursor-pointer',
                 selectedCategory === category._id
-                  ? 'bg-blue-400 text-white'
-                  : 'bg-gray-300 text-gray-700',
+                  ? 'bg-gradient-to-r from-blue-600/80 to-purple-600/80 text-white border-blue-400/50 shadow-lg shadow-blue-500/30'
+                  : 'bg-slate-800/50 text-gray-300 border-purple-500/20 hover:bg-slate-700/50 hover:border-blue-400/50 hover:shadow-md hover:shadow-purple-500/20',
               ]"
             >
-              {{ categoryWordCounts[category._id] || 0 }}
-            </span>
-          </div>
-        </button>
-      </div>
+              <div class="relative z-10 flex items-center justify-between">
+                <span class="flex items-center gap-3 min-w-0">
+                  <span
+                    class="text-xl group-hover/btn:scale-110 group-hover/btn:rotate-12 transition-transform duration-300 flex-shrink-0"
+                  >
+                    🏷️
+                  </span>
+                  <span class="font-semibold truncate">{{
+                    category.name
+                  }}</span>
+                </span>
+                <span
+                  :class="[
+                    'text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap ml-2 flex-shrink-0',
+                    selectedCategory === category._id
+                      ? 'bg-white/20 text-white'
+                      : 'bg-purple-500/20 text-purple-300',
+                  ]"
+                >
+                  {{ categoryWordCounts[category._id] || 0 }}
+                </span>
+              </div>
 
-      <!-- Expand/Collapse Toggle (Mobile) -->
-      <button
-        v-if="!isExpanded && categories.length > 3"
-        @click="isExpanded = true"
-        class="w-full mt-3 lg:hidden text-blue-500 hover:text-blue-600 font-poppins text-sm font-semibold transition-colors"
+              <!-- Hover gradient background -->
+              <div
+                v-if="selectedCategory !== category._id"
+                class="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"
+              ></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div v-if="categories.length === 0" class="text-center py-12">
+          <p class="text-gray-400 text-sm font-poppins">📭 No categories yet</p>
+          <p class="text-gray-500 text-xs font-poppins mt-2">
+            Create your first category to get started
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Count Info -->
+    <div
+      class="mt-6 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-lg p-4 text-center backdrop-blur-sm"
+    >
+      <p class="text-gray-400 text-xs font-poppins uppercase tracking-wider">
+        Total Categories
+      </p>
+      <p
+        class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-poppins mt-2"
       >
-        Show More ↓
-      </button>
-      <button
-        v-if="isExpanded && categories.length > 3"
-        @click="isExpanded = false"
-        class="w-full mt-3 lg:hidden text-blue-500 hover:text-blue-600 font-poppins text-sm font-semibold transition-colors"
-      >
-        Show Less ↑
-      </button>
+        {{ categories.length }}
+      </p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed, ref } from "vue";
-
-const props = defineProps({
-  categories: {
-    type: Array,
-    required: true,
-    default: () => [],
-  },
-  selectedCategory: {
-    type: String,
-    default: null,
-  },
-  categoryWordCounts: {
-    type: Object,
-    required: true,
-    default: () => ({}),
-  },
+defineProps({
+  categories: Array,
+  selectedCategory: [String, null],
+  categoryWordCounts: Object,
 });
 
-const emit = defineEmits(["selectCategory", "openCategoryModal"]);
-
-const isExpanded = ref(false);
-
-const selectCategory = (categoryId) => {
-  emit("selectCategory", categoryId);
-};
-
-// Calculate total word count
-const totalWordCount = computed(() => {
-  return Object.values(props.categoryWordCounts).reduce(
-    (sum, count) => sum + count,
-    0
-  );
-});
+defineEmits(["selectCategory", "openCategoryModal"]);
 </script>
 
 <style scoped>
@@ -158,26 +125,29 @@ const totalWordCount = computed(() => {
   font-family: "Poppins", sans-serif;
 }
 
-/* Smooth scrolling for the collapsed state */
-div.space-y-2 {
-  overflow-y: auto;
-}
-
-/* Custom scrollbar styling */
-div.space-y-2::-webkit-scrollbar {
+/* Custom Scrollbar Styling */
+.scrollbar-thin::-webkit-scrollbar {
   width: 6px;
 }
 
-div.space-y-2::-webkit-scrollbar-track {
-  background: transparent;
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(51, 65, 85, 0.5);
+  border-radius: 10px;
 }
 
-div.space-y-2::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgb(147, 51, 234);
+  border-radius: 10px;
+  transition: background 0.3s;
 }
 
-div.space-y-2::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgb(168, 85, 247);
+}
+
+/* Firefox Scrollbar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(147, 51, 234) rgba(51, 65, 85, 0.5);
 }
 </style>
