@@ -141,7 +141,7 @@
                       : 'bg-blue-500/20 text-blue-300',
                   ]"
                 >
-                  {{ category.count }} words
+                  {{ category.wordCount }} words
                 </span>
               </div>
 
@@ -155,7 +155,9 @@
                 <div
                   :style="{
                     width: `${
-                      (category.count / (topCategories[0]?.count || 1)) * 100
+                      (category.wordCount /
+                        (topCategories[0]?.wordCount || 1)) *
+                      100
                     }%`,
                   }"
                   :class="[
@@ -173,8 +175,9 @@
 
               <!-- Percentage -->
               <p class="text-xs text-gray-400 mt-2 font-poppins">
-                {{ Math.round((category.count / props.totalWordCount) * 100) }}%
-                of total dictionary
+                {{
+                  Math.round((category.wordCount / props.totalWordCount) * 100)
+                }}% of total dictionary
               </p>
             </div>
           </div>
