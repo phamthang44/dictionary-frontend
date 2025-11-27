@@ -177,7 +177,7 @@ onMounted(async () => {
   try {
     const response = await statisticsApi.getStats();
     console.log("API response:", response.data.data);
-
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate delay for demo
     const data = response.data.data;
 
     stats.value = {
