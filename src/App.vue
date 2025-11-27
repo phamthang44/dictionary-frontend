@@ -224,7 +224,7 @@ const getNavLinkClass = (pageName) => {
                   ]"
                 >
                   🏠 Home
-                  <!-- ✅ Active indicator -->
+                  <!-- Active indicator -->
                   <span
                     v-if="isPageActive('home')"
                     class="ml-2 inline-block text-purple-400"
@@ -247,7 +247,7 @@ const getNavLinkClass = (pageName) => {
                   ]"
                 >
                   📚 My Dictionary
-                  <!-- ✅ Active indicator -->
+                  <!-- Active indicator -->
                   <span
                     v-if="isPageActive('dictionary')"
                     class="ml-2 inline-block text-blue-400"
@@ -270,7 +270,7 @@ const getNavLinkClass = (pageName) => {
                   ]"
                 >
                   📊 Statistics
-                  <!-- ✅ Active indicator -->
+                  <!-- Active indicator -->
                   <span
                     v-if="isPageActive('statistics')"
                     class="ml-2 inline-block text-pink-400"

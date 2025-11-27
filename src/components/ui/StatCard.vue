@@ -1,5 +1,5 @@
 <script setup>
-import { computed, VueElement } from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
   title: {
@@ -28,10 +28,6 @@ const props = defineProps({
   color: {
     type: String,
     default: "purple",
-  },
-  description: {
-    type: VueElement,
-    default: null,
   },
 });
 

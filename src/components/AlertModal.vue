@@ -94,7 +94,7 @@ const autoClose = (timeout = 5000) => {
   }
 };
 
-// ✅ NEW: Watch for show changes
+// Watch for show changes
 import { watch } from "vue";
 watch(
   () => props.show,
