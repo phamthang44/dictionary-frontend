@@ -185,7 +185,7 @@ onMounted(async () => {
       wordsAddedThisMonth: data.wordsAddedThisMonth || 0,
       streak: data.streak || 0,
       avgWordsPerDay: data.avgWordsPerDay || 0,
-      categoryStats: data.categoryStats.data || {},
+      categoryStats: data.categoryStats || {},
     };
 
     chartData.value = data.chartData || [];

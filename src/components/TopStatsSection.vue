@@ -13,9 +13,9 @@
     <!-- Categories -->
     <StatCard
       :title="'Categories'"
-      :value="stats.categoryStats?.totalCategories || 0"
+      :value="stats.categoryStats.totalCategories || 0"
       icon="🏷️"
-      :trendValue="stats.categoryStats?.newCategoriesThisMonth || 0"
+      :trendValue="stats.categoryStats.newCategoriesThisMonth || 0"
       :trendLabel="'new this month'"
       color="blue"
     />
@@ -48,6 +48,7 @@
 </template>
 <script setup>
 import StatCard from "./ui/StatCard.vue";
+
 defineProps({
   stats: {
     type: Object,
