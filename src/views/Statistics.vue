@@ -172,6 +172,9 @@ const formatDate = (date) => {
   return date.toLocaleDateString("en-US", options);
 };
 
+const currentDay = new Date().getDay();
+const index = currentDay === 0 ? 6 : currentDay - 1;
+
 onMounted(async () => {
   isLoading.value = true;
   try {
@@ -191,7 +194,7 @@ onMounted(async () => {
     chartData.value = data.chartData || [];
     weeklyActivity.value = data.weeklyActivity || [];
     topCategories.value = data.topCategories || [];
-    todaysWords.value = data.weeklyActivity?.[new Date().getDay()]?.words || 0;
+    todaysWords.value = data.weeklyActivity?.[index]?.words || 0;
   } catch (error) {
     console.error("❌ Failed to fetch statistics:", error);
   } finally {
