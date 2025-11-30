@@ -84,11 +84,11 @@ import SpotlightCard from "./SpotlightCard.vue";
           🔍
         </div>
         <h3 class="text-2xl font-bold text-white font-poppins mb-3">
-          Advanced Search
+          Comprehensive Search
         </h3>
         <p class="text-gray-400 font-poppins">
-          Find words in milliseconds with our powerful search engine. Filter by
-          category, difficulty, or custom criteria.
+          Instantly locate vocabulary by matching text within definitions and
+          examples, not just the word itself.
         </p>
         <div class="mt-6 flex gap-2">
           <span
